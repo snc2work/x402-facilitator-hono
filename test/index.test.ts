@@ -1,6 +1,16 @@
 import { describe, it, expect } from "vitest";
 import app from "../src/index";
 
+describe("Security Headers", () => {
+  it("should include security headers", async () => {
+    const res = await app.request("/");
+
+    expect(res.headers.get("x-content-type-options")).toBe("nosniff");
+    expect(res.headers.get("x-frame-options")).toBeTruthy();
+    expect(res.headers.get("referrer-policy")).toBeTruthy();
+  });
+});
+
 describe("X402 Facilitator API", () => {
   describe("GET /", () => {
     it("should return service information", async () => {

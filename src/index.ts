@@ -2,12 +2,13 @@ import { Hono } from "hono";
 import { logger } from "hono/logger";
 import { cors } from "hono/cors";
 import { prettyJSON } from "hono/pretty-json";
+import { secureHeaders } from "hono/secure-headers";
 import { appConfig } from "./config";
 import { Facilitator } from "./facilitator";
 
 const app = new Hono();
 
-// ミドルウェア
+app.use("*", secureHeaders());
 app.use("*", logger());
 app.use("*", cors());
 app.use("*", prettyJSON());
