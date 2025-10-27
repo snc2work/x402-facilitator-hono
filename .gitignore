@@ -1,0 +1,33 @@
+# 依存関係
+node_modules/
+yarn.lock
+.yarn/
+.pnp.*
+
+# ビルド出力
+dist/
+*.tsbuildinfo
+
+# 環境変数
+.env
+.env.local
+
+# ログ
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# テストカバレッジ
+coverage/
+
+# その他
+.cache/
