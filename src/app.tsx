@@ -10,10 +10,7 @@ import { TopPage } from "./views/TopPage.js";
 
 const app = new Hono<{ Bindings: Bindings }>();
 
-// Vercel
-if (!process.env.VERCEL) {
-  app.use("/*", serveStatic({ root: "./public" }));
-}
+app.use("/*", serveStatic({ root: "./public" }));
 
 app.use("*", security());
 app.use("*", corsMiddleware());
