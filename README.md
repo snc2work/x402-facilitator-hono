@@ -83,6 +83,41 @@ yarn dev
 
 The server will be running at `http://localhost:3004` (or the port specified in your `.env`).
 
+## 💡 Tips for Buyers (Client-Side)
+
+This section provides a tip for developers building a **Buyer application** on **Solana Mainnet** using `x402-fetch`.
+
+When using libraries like `x402-fetch`, you may encounter issues on Solana Mainnet. The default public RPC URL used internally by these libraries is often heavily rate-limited, which can cause payment verification or settlement to fail.
+
+For more reliable operation, you can also use a dedicated RPC provider such as Helius or QuickNode. You can pass your custom RPC URL via the `svmConfig` option.
+
+The following example applies to **`x402-fetch` version `^0.7.0`**. The specifications may differ in future versions.
+
+Here is a practical example of how to configure `wrapFetchWithPayment` with a custom Helius RPC URL:
+
+```typescript
+import { wrapFetchWithPayment, createSigner } from "x402-fetch";
+
+const solanaPrivateKey = process.env.SOLANA_PRIVATE_KEY;
+const signer = await createSigner("solana", solanaPrivateKey);
+
+const heliusApiKey = process.env.HELIUS_API_KEY;
+const heliusRpcUrl = `https://mainnet.helius-rpc.com/?api-key=${heliusApiKey}`;
+
+// Wrap the fetch function, providing the custom RPC URL via svmConfig.
+const fetchWithPayment = wrapFetchWithPayment(
+  fetch,
+  signer,
+  undefined,
+  undefined,
+  {
+    svmConfig: {
+      rpcUrl: heliusRpcUrl,
+    },
+  }
+);
+```
+
 ## ⚙️ Environment Variables
 
 The following environment variables are required for the application to run. Create a `.env` file in the project root.
