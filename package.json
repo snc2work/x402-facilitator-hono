@@ -15,7 +15,8 @@
     "build": "yarn tailwindcss -i ./src/styles/input.css -o ./public/styles.css --minify && tsc",
     "start": "node dist/server.js",
     "test": "vitest",
-    "test:coverage": "vitest --coverage"
+    "test:coverage": "vitest --coverage",
+    "vercel-build": "yarn build"
   },
   "dependencies": {
     "@hono/node-server": "^1.19.6",
