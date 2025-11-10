@@ -10,13 +10,12 @@
   ],
   "scripts": {
     "dev": "concurrently \"yarn:dev:server\" \"yarn:css:watch\"",
-    "dev:server": "tsx watch src/server.ts",
+    "dev:server": "tsx watch src/index.ts",
     "css:watch": "yarn tailwindcss -i ./src/styles/input.css -o ./public/styles.css --watch",
-    "build": "yarn tailwindcss -i ./src/styles/input.css -o ./public/styles.css --minify && tsc",
-    "start": "node dist/server.js",
+    "build": "yarn tailwindcss -i ./src/styles/input.css -o ./public/styles.css --minify",
+    "start": "tsx src/index.ts",
     "test": "vitest",
-    "test:coverage": "vitest --coverage",
-    "vercel-build": "yarn build"
+    "test:coverage": "vitest --coverage"
   },
   "dependencies": {
     "@hono/node-server": "^1.19.6",

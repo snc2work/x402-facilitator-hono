@@ -1,8 +1,9 @@
 import { serve } from "@hono/node-server";
 import app from "./app.js";
 
-// Vercel
-if (!process.env.VERCEL) {
+export default app;
+
+if (process.env.NODE_ENV !== "production") {
   const port = parseInt(process.env.PORT || "3002");
   console.log(`Server is running on http://localhost:${port}`);
   serve({
@@ -10,5 +11,3 @@ if (!process.env.VERCEL) {
     port,
   });
 }
-
-export default app;

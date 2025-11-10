@@ -10,7 +10,7 @@ import { TopPage } from "./views/TopPage.js";
 
 const app = new Hono<{ Bindings: Bindings }>();
 
-if (!process.env.VERCEL) {
+if (process.env.NODE_ENV !== "production") {
   app.use("/*", serveStatic({ root: "./public" }));
 }
 
