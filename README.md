@@ -14,9 +14,10 @@ This project is a re-implementation of the official x402 facilitator example fro
 
 This implementation is intended for **educational and demonstrational purposes only**. It serves as a learning resource for those who want to build their own x402 facilitator using Hono.
 
-**Please DO NOT use this code in a production environment as-is.** Before considering deployment, you must thoroughly review and enhance the security, error handling, and overall robustness of the code to suit your specific needs.
+**Please DO NOT use this code in a production environment as-is.** Before considering deployment, you must thoroughly review and enhance the security, including the secure management of private keys, error handling, and overall robustness of the code to suit your specific needs.
 
-While this application has been verified locally, **deployment to cloud platforms like Vercel has not been tested.** You will be responsible for any configurations and verifications required for a production deployment. **Use at your own risk.**
+While this application is designed for deployment to Vercel, **it has only been verified in a local environment.**
+You are responsible for any configurations and verifications required for a production deployment. **Use at your own risk.**
 
 ## ✨ Key Features
 
