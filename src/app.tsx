@@ -10,13 +10,9 @@ import { TopPage } from "./views/TopPage.js";
 
 const app = new Hono<{ Bindings: Bindings }>();
 
-app.use("*", async (c, next) => {
-  console.log(`[DEBUG] Request Path: ${c.req.path}`);
-  await next();
-  console.log(`[DEBUG] Response Status: ${c.res.status}`);
-});
-
-app.use("/*", serveStatic({ root: "./public" }));
+if (!process.env.VERCEL) {
+  app.use("/*", serveStatic({ root: "./public" }));
+}
 
 app.use("*", security());
 app.use("*", corsMiddleware());
