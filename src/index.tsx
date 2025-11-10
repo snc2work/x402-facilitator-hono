@@ -7,6 +7,7 @@ import { security, corsMiddleware } from "./middlewares/security.js";
 import { errorHandler, notFoundHandler } from "./middlewares/error.js";
 import routes from "./routes/index.js";
 import { TopPage } from "./views/TopPage.js";
+import { serve } from "@hono/node-server";
 
 const app = new Hono<{ Bindings: Bindings }>();
 
@@ -29,3 +30,12 @@ app.notFound(notFoundHandler);
 app.onError(errorHandler);
 
 export default app;
+
+if (process.env.NODE_ENV !== "production") {
+  const port = parseInt(process.env.PORT || "3002");
+  console.log(`Server is running on http://localhost:${port}`);
+  serve({
+    fetch: app.fetch,
+    port,
+  });
+}

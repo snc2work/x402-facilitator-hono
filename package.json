@@ -10,10 +10,10 @@
   ],
   "scripts": {
     "dev": "concurrently \"yarn:dev:server\" \"yarn:css:watch\"",
-    "dev:server": "tsx watch src/index.ts",
+    "dev:server": "tsx watch src/index.tsx",
     "css:watch": "yarn tailwindcss -i ./src/styles/input.css -o ./public/styles.css --watch",
     "build": "yarn tailwindcss -i ./src/styles/input.css -o ./public/styles.css --minify",
-    "start": "tsx src/index.ts",
+    "start": "tsx src/index.tsx",
     "test": "vitest",
     "test:coverage": "vitest --coverage"
   },
