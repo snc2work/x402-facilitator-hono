@@ -2,9 +2,12 @@
   "name": "x402-facilitator-hono",
   "version": "1.0.0",
   "type": "module",
-  "main": "dist/index.js",
+  "main": "dist/server.js",
   "author": "develop",
   "license": "Apache-2.0",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "concurrently \"yarn:dev:server\" \"yarn:css:watch\"",
     "dev:server": "tsx watch src/server.ts",
