@@ -4,11 +4,15 @@
     {
       "src": "package.json",
       "use": "@vercel/node",
-      "config": { "includeFiles": ["dist/**", "public/**"] }
+      "config": {
+        "includeFiles": ["dist/**", "public/**"]
+      }
     }
   ],
   "routes": [
-    { "src": "/public/(.*)", "dest": "/public/$1" },
-    { "src": "/(.*)", "dest": "dist/server.js" }
+    {
+      "src": "/(.*)",
+      "dest": "dist/server.js"
+    }
   ]
 }
