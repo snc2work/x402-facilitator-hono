@@ -5,7 +5,6 @@
     "moduleResolution": "NodeNext",
     "lib": ["ES2022"],
     "outDir": "./dist",
-    "rootDir": "./src",
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx",
     "strict": true,
