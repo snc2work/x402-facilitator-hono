@@ -1,29 +1,37 @@
 {
-  "name": "x402-hono-facilitator",
+  "name": "x402-facilitator-hono",
   "version": "1.0.0",
   "type": "module",
   "main": "dist/index.js",
-  "author": "develop <******@gmail.com>",
-  "license": "MIT",
+  "author": "develop",
+  "license": "Apache-2.0",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
-    "build": "tsc",
-    "start": "node dist/index.js",
+    "dev": "concurrently \"yarn:dev:server\" \"yarn:css:watch\"",
+    "dev:server": "tsx watch src/server.ts",
+    "css:watch": "yarn tailwindcss -i ./src/styles/input.css -o ./public/styles.css --watch",
+    "build": "yarn tailwindcss -i ./src/styles/input.css -o ./public/styles.css --minify && tsc",
+    "start": "node dist/server.js",
     "test": "vitest",
     "test:coverage": "vitest --coverage"
   },
   "dependencies": {
-    "@hono/node-server": "^1.19.5",
+    "@hono/node-server": "^1.19.6",
     "dotenv": "^17.2.3",
     "hono": "^4.10.3",
     "viem": "^2.38.4",
-    "x402": "^0.7.0"
+    "x402": "^0.7.0",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@types/node": "^24.9.1",
     "@vitest/coverage-v8": "^1.6.0",
+    "autoprefixer": "^10.4.21",
+    "concurrently": "^9.2.1",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.0.0",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3",
     "vitest": "^1.6.0"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

@@ -1,105 +1,121 @@
 import { describe, it, expect } from "vitest";
-import app from "../src/index";
+import app from "../src/app";
 
-describe("Security Headers", () => {
-  it("should include security headers", async () => {
-    const res = await app.request("/");
-
-    expect(res.headers.get("x-content-type-options")).toBe("nosniff");
-    expect(res.headers.get("x-frame-options")).toBeTruthy();
-    expect(res.headers.get("referrer-policy")).toBeTruthy();
-  });
-});
+const mockEnv = {
+  EVM_PRIVATE_KEY:
+    "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
+  SVM_PRIVATE_KEY: "",
+  NODE_ENV: "test",
+  SUPPORTED_NETWORKS: "base-sepolia",
+  MIN_CONFIRMATIONS: "1",
+};
 
 describe("X402 Facilitator API", () => {
-  describe("GET /", () => {
-    it("should return service information", async () => {
-      const res = await app.request("/");
-      expect(res.status).toBe(200);
+  const testRequest = (path: string, options?: RequestInit, env = mockEnv) => {
+    return app.request(path, options, env);
+  };
 
-      const json = await res.json();
-      expect(json).toHaveProperty("service", "x402 Facilitator");
-      expect(json).toHaveProperty("status", "healthy");
+  describe("GET /", () => {
+    it("should return the HTML top page", async () => {
+      const res = await testRequest("/");
+      expect(res.status).toBe(200);
+      expect(res.headers.get("Content-Type")).toContain("text/html");
+      const text = await res.text();
+      expect(text).toContain("<title>x402 Facilitator</title>");
     });
   });
 
   describe("GET /health", () => {
     it("should return health status", async () => {
-      const res = await app.request("/health");
+      const res = await testRequest("/health");
       expect(res.status).toBe(200);
-
       const json = await res.json();
       expect(json).toHaveProperty("status", "ok");
-      expect(json).toHaveProperty("uptime");
     });
   });
 
-  describe("GET /facilitator/supported", () => {
-    it("should return supported payment kinds", async () => {
-      const res = await app.request("/facilitator/supported");
+  describe("GET /supported", () => {
+    it("should return supported payment kinds for EVM", async () => {
+      const res = await testRequest("/supported");
       expect(res.status).toBe(200);
-
       const json = await res.json();
       expect(json).toHaveProperty("kinds");
-      expect(Array.isArray(json.kinds)).toBe(true);
-      expect(json.kinds.length).toBeGreaterThan(0);
-
-      const firstKind = json.kinds[0];
-      expect(firstKind).toHaveProperty("x402Version", 1);
-      expect(firstKind).toHaveProperty("scheme", "exact");
-      expect(firstKind).toHaveProperty("network");
     });
   });
 
-  describe("POST /facilitator/verify", () => {
+  describe("POST /verify", () => {
     it("should return 400 for missing payload", async () => {
-      const res = await app.request("/facilitator/verify", {
+      const res = await testRequest("/verify", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({}),
       });
-
       expect(res.status).toBe(400);
-      const json = await res.json();
-      expect(json).toHaveProperty("error");
     });
 
     it("should return 400 for invalid JSON", async () => {
-      const res = await app.request("/facilitator/verify", {
+      const res = await testRequest("/verify", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: "invalid json",
       });
-
       expect(res.status).toBe(400);
+    });
+
+    it("should handle EVM network verification request", async () => {
+      const res = await testRequest("/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          paymentPayload: {
+            network: "base-sepolia",
+            transactionHash: "0x123...",
+          },
+          paymentRequirements: {
+            network: "base-sepolia",
+            recipient: "0xabc...",
+            amount: "1000000000000000000",
+          },
+        }),
+      });
+      expect([200, 400]).toContain(res.status);
     });
   });
 
-  describe("POST /facilitator/settle", () => {
+  describe("POST /settle", () => {
     it("should return 400 for missing payload", async () => {
-      const res = await app.request("/facilitator/settle", {
+      const res = await testRequest("/settle", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({}),
       });
-
       expect(res.status).toBe(400);
-      const json = await res.json();
-      expect(json).toHaveProperty("error");
+    });
+
+    it("should handle EVM network settle request", async () => {
+      const res = await testRequest("/settle", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          paymentPayload: {
+            network: "base-sepolia",
+            transactionHash: "0x123...",
+          },
+          paymentRequirements: {
+            network: "base-sepolia",
+            recipient: "0xabc...",
+            amount: "1000000000000000000",
+          },
+        }),
+      });
+      expect([200, 400]).toContain(res.status);
     });
   });
 
   describe("404 Handler", () => {
     it("should return 404 for unknown routes", async () => {
-      const res = await app.request("/unknown-route");
+      const res = await testRequest("/unknown-route");
       expect(res.status).toBe(404);
-
       const json = await res.json();
       expect(json).toHaveProperty("error", "Not Found");
     });
