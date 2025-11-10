@@ -1,39 +1,30 @@
-import type { FC } from "hono/jsx";
-import { Layout } from "./Layout.js";
+import { Hono } from "hono";
+import { logger } from "hono/logger";
+import { prettyJSON } from "hono/pretty-json";
+import type { FC, PropsWithChildren } from "hono/jsx";
+import type { Bindings } from "./types/bindings.js";
+import { security, corsMiddleware } from "./middlewares/security.js";
+import { errorHandler, notFoundHandler } from "./middlewares/error.js";
+import routes from "./routes/index.js";
+import { serveStatic } from "@hono/node-server/serve-static";
+import { serve } from "@hono/node-server";
 
-const endpoints = [
-  {
-    method: "GET",
-    path: "/health",
-    description: "",
-  },
-  {
-    method: "GET",
-    path: "/supported",
-    description: "",
-  },
-  {
-    method: "GET",
-    path: "/verify",
-    description: "",
-  },
-  {
-    method: "POST",
-    path: "/verify",
-    description: "",
-  },
-  {
-    method: "GET",
-    path: "/settle",
-    description: "",
-  },
-  {
-    method: "POST",
-    path: "/settle",
-    description: "",
-  },
-];
+// Layout
+const Layout: FC<PropsWithChildren<{ title: string }>> = (props) => {
+  return (
+    <html lang="ja" className="dark">
+      <head>
+        <meta charSet="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{props.title}</title>
+        <link href="/styles.css" rel="stylesheet" />
+      </head>
+      <body>{props.children}</body>
+    </html>
+  );
+};
 
+// EndpointItem
 const EndpointItem: FC<{
   method: string;
   path: string;
@@ -63,7 +54,41 @@ const EndpointItem: FC<{
   );
 };
 
-export const TopPage: FC = () => {
+// TopPage
+const TopPage: FC = () => {
+  const endpoints = [
+    {
+      method: "GET",
+      path: "/health",
+      description: "",
+    },
+    {
+      method: "GET",
+      path: "/supported",
+      description: "",
+    },
+    {
+      method: "GET",
+      path: "/verify",
+      description: "",
+    },
+    {
+      method: "POST",
+      path: "/verify",
+      description: "",
+    },
+    {
+      method: "GET",
+      path: "/settle",
+      description: "",
+    },
+    {
+      method: "POST",
+      path: "/settle",
+      description: "",
+    },
+  ];
+
   return (
     <Layout title="x402 Facilitator">
       <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col items-center justify-center p-4">
@@ -121,3 +146,34 @@ export const TopPage: FC = () => {
     </Layout>
   );
 };
+
+const app = new Hono<{ Bindings: Bindings }>();
+
+if (process.env.NODE_ENV !== "production") {
+  app.use("/*", serveStatic({ root: "./public" }));
+}
+
+app.use("*", security());
+app.use("*", corsMiddleware());
+app.use("*", logger());
+app.use("*", prettyJSON());
+
+app.get("/", (c) => {
+  return c.html(<TopPage />);
+});
+
+app.route("/", routes);
+
+app.notFound(notFoundHandler);
+app.onError(errorHandler);
+
+export default app;
+
+if (process.env.NODE_ENV !== "production") {
+  const port = parseInt(process.env.PORT || "3002");
+  console.log(`Server is running on http://localhost:${port}`);
+  serve({
+    fetch: app.fetch,
+    port,
+  });
+}

@@ -32,3 +32,4 @@ coverage/
 # その他
 .cache/
 .README.md
+.vercel
