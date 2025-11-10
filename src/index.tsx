@@ -1,13 +1,31 @@
 import { Hono } from "hono";
 import { logger } from "hono/logger";
 import { prettyJSON } from "hono/pretty-json";
+import type { FC } from "hono/jsx";
 import { serveStatic } from "@hono/node-server/serve-static";
 import type { Bindings } from "./types/bindings.js";
 import { security, corsMiddleware } from "./middlewares/security.js";
 import { errorHandler, notFoundHandler } from "./middlewares/error.js";
 import routes from "./routes/index.js";
-import { TopPage } from "./views/TopPage.js";
 import { serve } from "@hono/node-server";
+
+// TopPageを直接定義（FC型でJSXエラー回避）
+const TopPage: FC = () => {
+  return (
+    <html>
+      <head>
+        <title>X402 Facilitator</title>
+        <link rel="stylesheet" href="/styles.css" />
+      </head>
+      <body>
+        <div className="bg-blue-500 text-white p-4">
+          <h1>Hello from TopPage!</h1>
+          <p>Your app content here...</p>
+        </div>
+      </body>
+    </html>
+  );
+};
 
 const app = new Hono<{ Bindings: Bindings }>();
 
