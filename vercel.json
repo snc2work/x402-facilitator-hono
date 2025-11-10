@@ -2,20 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "package.json",
-      "use": "@vercel/build-utils/run@76a591e1d2c672b9a7a6617a264a93f0b2bd4240",
-      "config": {
-        "maxLambdaSize": "15mb",
-        "runtime": "nodejs18.x",
-        "framework": "hono",
-        "entrypoint": "api/index.ts"
-      }
+      "src": "api/index.ts",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/api/index"
+      "dest": "/api/index.ts"
     }
   ]
 }
