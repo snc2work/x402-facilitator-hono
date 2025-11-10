@@ -2,7 +2,7 @@
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-A lightweight and efficient payment facilitator for the x402 standard, built with Hono. This server handles payment verification and settlement across multiple blockchains, including Solana and Base.
+A lightweight and efficient payment facilitator for the x402 standard, built with Hono. This server supports payment verification and settlement on multiple blockchains, such as Solana and Base.
 
 ![x402 Facilitator Top Page](./assets/toppage.png)
 
@@ -21,7 +21,7 @@ While this application has been verified locally, **deployment to cloud platform
 ## ✨ Key Features
 
 - **Blazing Fast**: Built on top of [Hono](https://hono.dev/), one of the fastest web frameworks for JavaScript.
-- **Multi-Chain Support**: Seamlessly handles payments for Solana (Mainnet, Devnet) and Base (Mainnet, Sepolia).
+- **Multi-Chain Support**: Supports payment handling on both the Solana (Mainnet, Devnet) and Base (Mainnet, Sepolia) blockchains.
 - **x402 Compliant**: Implements `verify` and `settle` endpoints for the x402 payment standard.
 - **Static Frontend**: A simple and informative landing page built with Hono's JSX and styled with Tailwind CSS.
 
