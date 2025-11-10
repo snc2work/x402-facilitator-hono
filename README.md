@@ -88,17 +88,23 @@ The server will be running at `http://localhost:3004` (or the port specified in 
 The following environment variables are required for the application to run. Create a `.env` file in the project root.
 
 ```env
-# Server port
-PORT=3004
+# Node environment (development, production, test)
+NODE_ENV=development
 
-# Comma-separated list of supported networks (e.g., "base,base-sepolia,solana,solana-devnet")
-SUPPORTED_NETWORKS=base-sepolia
+# Server port (e.g., 3002)
+PORT=3002
 
-# EVM private key (0x...) for settling payments
-EVM_PRIVATE_KEY=
+# Allowed origins for CORS (e.g., http://localhost:3000,https://example.com)
+ALLOWED_ORIGINS=
 
-# SVM private key (Base58 encoded) for settling payments
-SVM_PRIVATE_KEY=
+# Comma-separated list of supported networks
+SUPPORTED_NETWORKS=base,base-sepolia,solana,solana-devnet
+
+# EVM private key for settling payments (e.g., 0x...)
+EVM_PRIVATE_KEY=your-key
+
+# SVM private key for settling payments (Base58 encoded)
+SVM_PRIVATE_KEY=your-key
 
 # -----------------------------------------------------------------
 # Optional but Recommended: RPC URLs for Solana networks
