@@ -2,7 +2,7 @@
   "name": "x402-facilitator-hono",
   "version": "1.0.0",
   "type": "module",
-  "main": "dist/server.js",
+  "main": "src/index.ts",
   "author": "develop",
   "license": "Apache-2.0",
   "files": [
