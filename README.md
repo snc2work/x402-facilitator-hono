@@ -16,8 +16,8 @@ This implementation is intended for **educational and demonstrational purposes o
 
 **Please DO NOT use this code in a production environment as-is.** Before considering deployment, you must thoroughly review and enhance the security, including the secure management of private keys, error handling, and overall robustness of the code to suit your specific needs.
 
-While this application is designed for deployment to Vercel, **it has only been verified in a local environment.**
-You are responsible for any configurations and verifications required for a production deployment. **Use at your own risk.**
+This application is designed for deployment to Vercel.
+Please be aware that you are responsible for all configurations and verifications necessary for a production environment. Use at your own risk.
 
 ## ✨ Key Features
 
